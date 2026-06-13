@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Concept Meurtrière — Laser-cut</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Cinzel:wght@400;600&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0f12;--bg2:#151720;--bg3:#1c1e27;
+  --border:#2a2e3d;--border2:#363b50;
+  --red:#e8341a;--wood1:#d4a55a;--wood2:#c8943e;--wood3:#b07a2a;
+  --text:#8fa8c8;--text2:#5a6e8a;--text3:#3a4e66;
+  --accent:#4a7ccc;--accent2:#2a5ca8;
+  --cut:#e8341a;--engrave:#1a1a1a;
+}
+body{
+  font-family:'Courier Prime',monospace;
+  background:var(--bg);color:var(--text);
+  padding:20px;min-height:100vh;
+  background-image:radial-gradient(ellipse at 20% 0%, #1a1e2e 0%, transparent 60%),
+                   radial-gradient(ellipse at 80% 100%, #12101a 0%, transparent 50%);
+}
+
+/* ── HEADER ── */
+.header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.header-badge{
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;
+  color:var(--text3);text-transform:uppercase;
+  border:1px solid var(--border);border-radius:2px;padding:3px 8px;
+}
+.header h1{
+  font-family:'Cinzel',serif;font-size:18px;font-weight:600;
+  color:#7a98c0;letter-spacing:.06em;
+}
+.header .sub{font-size:11px;color:var(--text3);margin-left:auto;letter-spacing:.05em}
+
+/* ── CONTROLS ── */
+.ctrl{
+  display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;
+  background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:12px;margin-bottom:16px;
+  position:relative;overflow:hidden;
+}
+.ctrl::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent2),transparent);
+}
+.ig{display:flex;flex-direction:column;gap:4px}
+.ig label{
+  font-size:9px;color:var(--text3);text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.ig input,.ig select{
+  background:#0a0c12;border:1px solid var(--border);color:#7a98c0;
+  padding:5px 8px;border-radius:3px;font-size:12px;font-family:'Courier Prime',monospace;
+  width:82px;transition:border-color .2s;
+}
+.ig input:focus,.ig select:focus{
+  outline:none;border-color:var(--accent2);
+}
+.ctrl-sep{width:1px;background:var(--border);align-self:stretch;margin:0 4px}
+button{
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#c8d8f0;border:none;padding:6px 18px;border-radius:3px;
+  cursor:pointer;font-size:11px;font-family:'Courier Prime',monospace;
+  height:30px;letter-spacing:.06em;text-transform:uppercase;
+  transition:opacity .2s;
+}
+button:hover{opacity:.85}
+
+/* ── PANELS ── */
+.panels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.panels{grid-template-columns:1fr}}
+.panel{
+  background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  overflow:hidden;
+}
+.panel-head{
+  display:flex;align-items:center;gap:8px;padding:8px 12px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,var(--bg3) 0%,transparent 100%);
+}
+.panel-num{
+  font-size:9px;color:var(--text3);border:1px solid var(--border);
+  border-radius:2px;padding:1px 5px;letter-spacing:.06em;
+}
+.panel-title{font-size:10px;color:var(--text2);letter-spacing:.06em;text-transform:uppercase}
+.svgbox{
+  background:#f0ebe1;display:flex;align-items:center;justify-content:center;
+  padding:12px;min-height:180px;overflow:auto;
+  border-bottom:1px solid var(--border);
+}
+.svgbox svg{display:block;max-width:100%}
+.panel-foot{padding:8px 12px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:5px}
+.li{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--text3)}
+.ld{display:inline-block;width:16px;height:2px;border-radius:1px}
+.pinfo{font-size:9px;color:var(--text3);line-height:1.7;font-family:'Courier Prime',monospace}
+
+/* ── SCHEMA ASSEMBLAGE ── */
+.schema{
+  margin-top:14px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:6px;padding:12px;
+}
+.schema-title{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.schema svg{display:block;width:100%;max-width:600px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">Module 01</div>
+  <h1>Meurtrière Médiévale</h1>
+  <div class="sub">Laser-cut concept · 3 calques · 3 pièces</div>
+</div>
+
+<div class="ctrl">
+  <div class="ig"><label>Échelle 1/N</label><input id="sc" type="number" value="56" min="10" max="300"></div>
+  <div class="ig"><label>Matériau (mm)</label><input id="mt" type="number" value="3" min="1" max="8" step="0.5"></div>
+  <div class="ctrl-sep"></div>
+  <div class="ig"><label>Face L (mm)</label><input id="fw" type="number" value="80" min="30" max="300" step="5"></div>
+  <div class="ig"><label>Face H (mm)</label><input id="fh" type="number" value="50" min="20" max="300" step="5"></div>
+  <div class="ctrl-sep"></div>
+  <div class="ig"><label>Rangs briques</label><input id="nb" type="number" value="3" min="1" max="6"></div>
+  <div class="ig"><label>Overhang (mm)</label><input id="oh" type="number" value="2" min="0.5" max="10" step="0.5"></div>
+  <div class="ctrl-sep"></div>
+  <button onclick="gen()">Générer ↗</button>
+</div>
+
+<div class="panels">
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-num">01</span>
+      <span class="panel-title">Mur principal — découpes</span>
+    </div>
+    <div class="svgbox" id="pA"></div>
+    <div class="panel-foot">
+      <div class="legend">
+        <div class="li"><div class="ld" style="background:#e8341a"></div>Découpe</div>
+        <div class="li"><div class="ld" style="background:#c8943e;height:7px;border-radius:2px"></div>Bois</div>
+      </div>
+      <div class="pinfo" id="iA"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-num">02</span>
+      <span class="panel-title">Larmier en T</span>
+    </div>
+    <div class="svgbox" id="pB"></div>
+    <div class="panel-foot">
+      <div class="legend">
+        <div class="li"><div class="ld" style="background:#e8341a"></div>Découpe</div>
+      </div>
+      <div class="pinfo" id="iB"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-num">03</span>
+      <span class="panel-title">Encadrement briques</span>
+    </div>
+    <div class="svgbox" id="pC"></div>
+    <div class="panel-foot">
+      <div class="legend">
+        <div class="li"><div class="ld" style="background:#e8341a"></div>Découpe</div>
+        <div class="li"><div class="ld" style="background:#222"></div>Gravure</div>
+      </div>
+      <div class="pinfo" id="iC"></div>
+    </div>
+  </div>
+</div>
+
+<div class="schema">
+  <div class="schema-title">Schéma d'assemblage</div>
+  <svg id="schema" viewBox="0 0 580 160" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<script>
+const F=n=>n.toFixed(3);
+
+// ── Path: meurtrière (slit avec arrondi haut) ────────────────────
+// cx=center X, cy_bot=Y du bas, w=largeur, h=hauteur (hors arrondi)
+// ds=display scale, px/py=offset de panneau
+function meurtPath(cx,cy_bot,w,h,ds,px,py){
+  const r=w/2*ds;
+  const R=cx*ds+px, B=cy_bot*ds+py, T=(cy_bot-h)*ds+py;
+  // Arc sweep=0 → CCW en SVG = passe par le haut du cercle ✓
+  return `M${F(R-r)},${F(B)} L${F(R-r)},${F(T)} A${F(r)},${F(r)} 0 0 0 ${F(R+r)},${F(T)} L${F(R+r)},${F(B)} Z`;
+}
+
+// ── Path: rectangle arrondi ───────────────────────────────────────
+function rrp(x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);
+  return `M${F(x+r)},${F(y)} L${F(x+w-r)},${F(y)} Q${F(x+w)},${F(y)} ${F(x+w)},${F(y+r)} ` +
+         `L${F(x+w)},${F(y+h-r)} Q${F(x+w)},${F(y+h)} ${F(x+w-r)},${F(y+h)} ` +
+         `L${F(x+r)},${F(y+h)} Q${F(x)},${F(y+h)} ${F(x)},${F(y+h-r)} ` +
+         `L${F(x)},${F(y+r)} Q${F(x)},${F(y)} ${F(x+r)},${F(y)} Z`;
+}
+
+// ── Générer le SVG d'une pièce, retourner la chaîne ───────────────
+function mkSVG(w,h,content){
+  return `<svg width="${F(w)}" height="${F(h)}" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
+}
+
+// ── GENERATE ──────────────────────────────────────────────────────
+function gen(){
+  const sc  = +document.getElementById('sc').value||56;
+  const mat = +document.getElementById('mt').value||3;
+  const fW  = +document.getElementById('fw').value||80;
+  const fH  = +document.getElementById('fh').value||50;
+  const nB  = +document.getElementById('nb').value||3;
+  const oh  = +document.getElementById('oh').value||2;
+  const mort= 0.3; // joint mortier (mm modèle)
+
+  // Dimensions meurtrière à l'échelle modèle
+  const mW = 150 / sc;   // ~2.68mm à 1/56
+  const mH = 1000 / sc;  // ~17.86mm à 1/56
+  const bSz= 168 / sc;   // ~3mm à 1/56 (brique ~16.8cm réel)
+
+  // ═══ PANNEAU A : Mur principal ══════════════════════════════════
+  {
+    const P=12;
+    const ds=Math.min((310-P*2)/fW,(250-P*2)/fH);
+    const sW=fW*ds+P*2, sH=fH*ds+P*2;
+    const cx=fW/2, cbot=fH*0.70;
+
+    // Meurtrière + slot larmier
+    const mrt=meurtPath(cx,cbot,mW,mH,ds,P,P);
+    const sX=cx*ds+P, sY=cbot*ds+P, sW_=mat*ds, sH_=mat*ds;
+    const slot=`<rect x="${F(sX-sW_/2)}" y="${F(sY)}" width="${F(sW_)}" height="${F(sH_)}" fill="#f0e8d0" stroke="#e8341a" stroke-width="0.5"/>`;
+
+    // Annotation dimensions
+    const mxD=cx*ds+P, myTop=(cbot-mH)*ds+P, myBot=cbot*ds+P;
+    const ann=`
+      <line x1="${F(mxD-mW/2*ds-4)}" y1="${F(myTop)}" x2="${F(mxD-mW/2*ds-4)}" y2="${F(myBot)}" stroke="#888" stroke-width="0.4" stroke-dasharray="2,2"/>
+      <line x1="${F(mxD-mW/2*ds-6)}" y1="${F(myTop)}" x2="${F(mxD-mW/2*ds-2)}" y2="${F(myTop)}" stroke="#888" stroke-width="0.4"/>
+      <line x1="${F(mxD-mW/2*ds-6)}" y1="${F(myBot)}" x2="${F(mxD-mW/2*ds-2)}" y2="${F(myBot)}" stroke="#888" stroke-width="0.4"/>
+      <text x="${F(mxD-mW/2*ds-8)}" y="${F((myTop+myBot)/2)}" font-size="4" fill="#777" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90,${F(mxD-mW/2*ds-8)},${F((myTop+myBot)/2)})" font-family="monospace">${mH.toFixed(2)}mm</text>
+      <line x1="${F(cx*ds+P-mW/2*ds)}" y1="${F(myTop-4)}" x2="${F(cx*ds+P+mW/2*ds)}" y2="${F(myTop-4)}" stroke="#888" stroke-width="0.4"/>
+      <text x="${F(cx*ds+P)}" y="${F(myTop-7)}" font-size="4" fill="#777" text-anchor="middle" font-family="monospace">${mW.toFixed(2)}mm</text>
+    `;
+
+    document.getElementById('pA').innerHTML=mkSVG(sW,sH,
+      `<rect x="${P}" y="${P}" width="${F(fW*ds)}" height="${F(fH*ds)}" fill="#c8943e" stroke="#e8341a" stroke-width="0.6" rx="1"/>
+       <path d="${mrt}" fill="#f0e8d0" stroke="#e8341a" stroke-width="0.5"/>
+       ${slot}${ann}`
+    );
+    document.getElementById('iA').textContent=
+      `Face: ${fW}×${fH}mm · Fente: ${mW.toFixed(2)}×${mH.toFixed(2)}mm · Slot T: ${mat}×${mat}mm`;
+  }
+
+  // ═══ PANNEAU B : Larmier T ════════════════════════════════════
+  {
+    const barW=mW+2*oh, barH=mat, stemW=mat, stemH=mat;
+    const P=16;
+    const ds=Math.min((270-P*2)/barW, (180-P*2-20)/(barH+stemH));
+    const BW=barW*ds, BH=barH*ds, SW=stemW*ds, SH=stemH*ds;
+    const sW=barW*ds+P*2, sH=(barH+stemH)*ds+P*2+22;
+    const bx=P, by=P+14;
+
+    const tPath=
+      `M${F(bx)},${F(by)} L${F(bx+BW)},${F(by)} L${F(bx+BW)},${F(by+BH)} ` +
+      `L${F(bx+(BW+SW)/2)},${F(by+BH)} L${F(bx+(BW+SW)/2)},${F(by+BH+SH)} ` +
+      `L${F(bx+(BW-SW)/2)},${F(by+BH+SH)} L${F(bx+(BW-SW)/2)},${F(by+BH)} ` +
+      `L${F(bx)},${F(by+BH)} Z`;
+
+    // Flèche assemblage + annotations
+    const annB=`
+      <text x="${F(bx+BW/2)}" y="${F(by-4)}" text-anchor="middle" font-size="4.5" fill="#777" font-family="monospace">${barW.toFixed(2)} mm</text>
+      <text x="${F(bx+BW+3)}" y="${F(by+BH/2+1.5)}" font-size="4" fill="#777" font-family="monospace">${barH.toFixed(1)}mm</text>
+      <text x="${F(bx+(BW+SW)/2+2)}" y="${F(by+BH+SH/2+1.5)}" font-size="4" fill="#aaa" font-family="monospace">${stemW.toFixed(1)}mm</text>
+      <text x="${F(bx+BW/2)}" y="${F(by+BH+SH+13)}" text-anchor="middle" font-size="4" fill="#4a7ccc" font-family="monospace">↑ tige glisse dans slot du mur</text>
+    `;
+
+    document.getElementById('pB').innerHTML=mkSVG(sW,sH,
+      `<path d="${tPath}" fill="#c8943e" stroke="#e8341a" stroke-width="0.5"/>
+       ${annB}`
+    );
+    document.getElementById('iB').textContent=
+      `Barre: ${barW.toFixed(2)}×${barH.toFixed(2)}mm · Tige: ${stemW.toFixed(2)}×${stemH.toFixed(2)}mm · Dépasse: ${oh}mm de chaque côté`;
+  }
+
+  // ═══ PANNEAU C : Encadrement briques ═════════════════════════
+  {
+    const mort2=0.3;
+    const frameW=nB*(bSz+mort2);
+    const topF  =nB*(bSz+mort2);
+    const botF  =bSz+mort2;
+    const oW=mW+2*frameW;
+    const oH=mH+topF+botF;
+
+    // Position du trou dans la pièce (coordonnées locales mm)
+    const hCX=oW/2;
+    const hBotY=topF+mH;
+    const hTopY=topF;
+    const hL=hCX-mW/2, hR=hCX+mW/2;
+
+    const P=12;
+    const ds=Math.min((270-P*2)/oW,(310-P*2)/oH);
+    const sW=oW*ds+P*2, sH=oH*ds+P*2;
+
+    // Chemin extérieur (rectangulaire)
+    const outerP=`M${P},${P} L${F(P+oW*ds)},${P} L${F(P+oW*ds)},${F(P+oH*ds)} L${P},${F(P+oH*ds)} Z`;
+    // Trou meurtrière (fill-rule evenodd créera le trou)
+    const innerP=meurtPath(hCX,hBotY,mW,mH,ds,P,P);
+
+    // Briques gravées (carrés arrondis, en décalé)
+    const bricks=[];
+    let row=0;
+    for(let y=mort2/2; y+bSz*0.75<oH; y+=bSz+mort2, row++){
+      const xoff=(row%2)*(bSz*0.5);
+      for(let x=xoff; x<oW; x+=bSz+mort2){
+        const bx=x, bw=Math.min(bSz*0.82, oW-bx);
+        const by=y, bh=bSz*0.82;
+        if(bw<0.15||bh<0.15) continue;
+        // Exclure les briques dans le trou meurtrière
+        const inX=bx<hR && bx+bw>hL;
+        const inY=by<hBotY && by+bh>hTopY;
+        if(inX&&inY) continue;
+        const dx=bx*ds+P, dy=by*ds+P, dw=bw*ds, dh=bh*ds;
+        if(dw<0.4) continue;
+        bricks.push(rrp(dx,dy,dw,dh,Math.min(1.5,dh*0.18)));
+      }
+    }
+
+    document.getElementById('pC').innerHTML=mkSVG(sW,sH,
+      `<path fill-rule="evenodd" d="${outerP} ${innerP}" fill="#c8943e" stroke="#e8341a" stroke-width="0.5"/>
+       <path d="${innerP}" fill="none" stroke="#e8341a" stroke-width="0.5"/>
+       ${bricks.map(p=>`<path d="${p}" fill="none" stroke="#222" stroke-width="0.3"/>`).join('')}`
+    );
+    document.getElementById('iC').textContent=
+      `Pièce: ${oW.toFixed(2)}×${oH.toFixed(2)}mm · Brique: ${bSz.toFixed(2)}mm · ${nB} rangs de cadre`;
+  }
+
+  // ═══ SCHÉMA D'ASSEMBLAGE ════════════════════════════════════
+  drawSchema(mat, mW, mH, oh);
+}
+
+// ── Schéma isométrique simplifié ─────────────────────────────────
+function drawSchema(mat, mW, mH, oh){
+  const svg=document.getElementById('schema');
+  const barW=mW+2*oh;
+  const ds=6; // scale for schema
+  const wallH=mH*ds*1.4, wallW=80, wallD=mat*ds*2;
+  const cx=290, cy=80;
+
+  // Wall (front face, simplified)
+  const wl=cx-wallW/2, wr=cx+wallW/2, wt=cy-wallH/2, wb=cy+wallH/2;
+  // Meurtrière position in wall
+  const mW_d=mW*ds, mH_d=mH*ds;
+  const mX=cx-mW_d/2, mY=cy-mH_d/2;
+  const mBot=mY+mH_d;
+
+  // Larmier T (positioned at slot)
+  const bW_d=barW*ds, bH_d=mat*ds, sW_d=mat*ds, sH_d=mat*ds;
+  const tx=cx-bW_d/2, ty=mBot;
+
+  // Assembly arrow
+  const arrY=mBot-30;
+
+  svg.innerHTML=`
+    <!-- Wall body -->
+    <rect x="${wl}" y="${wt}" width="${wallW}" height="${wallH}" fill="#b8843a" stroke="#555" stroke-width="0.8" rx="1"/>
+    <!-- Meurtrière hole in wall -->
+    <path d="M${F(mX)},${F(mBot)} L${F(mX)},${F(mY+mW_d/2)} A${F(mW_d/2)},${F(mW_d/2)} 0 0 0 ${F(mX+mW_d)},${F(mY+mW_d/2)} L${F(mX+mW_d)},${F(mBot)} Z" fill="#f0ebe1" stroke="#e8341a" stroke-width="0.6"/>
+    <!-- Slot larmier -->
+    <rect x="${F(cx-mat*ds/2)}" y="${F(mBot)}" width="${F(mat*ds)}" height="${F(mat*ds)}" fill="#e8341a" stroke="#e8341a" stroke-width="0.5" opacity="0.7"/>
+    <!-- Larmier T (en attente d'assemblage) -->
+    <g transform="translate(0,${F(-mat*ds*2.5)})">
+      <path d="M${F(tx)},${F(ty)} L${F(tx+bW_d)},${F(ty)} L${F(tx+bW_d)},${F(ty+bH_d)} L${F(cx+sW_d/2)},${F(ty+bH_d)} L${F(cx+sW_d/2)},${F(ty+bH_d+sH_d)} L${F(cx-sW_d/2)},${F(ty+bH_d+sH_d)} L${F(cx-sW_d/2)},${F(ty+bH_d)} L${F(tx)},${F(ty+bH_d)} Z" fill="#d4a550" stroke="#e8341a" stroke-width="0.6"/>
+      <!-- Flèche assemblage -->
+      <line x1="${cx}" y1="${F(ty+bH_d+sH_d+2)}" x2="${cx}" y2="${F(ty+bH_d+sH_d+12)}" stroke="#4a7ccc" stroke-width="0.8" stroke-dasharray="3,2"/>
+      <polygon points="${cx-3},${F(ty+bH_d+sH_d+14)} ${cx+3},${F(ty+bH_d+sH_d+14)} ${cx},${F(ty+bH_d+sH_d+18)}" fill="#4a7ccc"/>
+    </g>
+    <!-- Encadrement briques (à gauche, flottant) -->
+    <g transform="translate(-140,0)">
+      <rect x="${cx-15}" y="${F(wt-5)}" width="30" height="${F(mH*ds*1.2+10)}" fill="#c08038" stroke="#e8341a" stroke-width="0.6" rx="1"/>
+      <!-- Trou -->
+      <path d="M${F(cx-mW_d/2)},${F(wt+mH_d*0.1+mW_d/2+mH_d)} L${F(cx-mW_d/2)},${F(wt+mH_d*0.1+mW_d/2)} A${F(mW_d/2)},${F(mW_d/2)} 0 0 0 ${F(cx+mW_d/2)},${F(wt+mH_d*0.1+mW_d/2)} L${F(cx+mW_d/2)},${F(wt+mH_d*0.1+mW_d/2+mH_d)} Z" fill="#f0ebe1" stroke="#e8341a" stroke-width="0.5"/>
+      <!-- Briques gravées stylisées -->
+      ${[0,1,2,3,4,5,6].map(i=>`
+        <rect x="${F(cx-13+(i%2)*3)}" y="${F(wt+i*14)}" width="8" height="5" rx="0.5" fill="none" stroke="#333" stroke-width="0.3"/>
+        <rect x="${F(cx+2-(i%2)*3)}" y="${F(wt+i*14)}" width="8" height="5" rx="0.5" fill="none" stroke="#333" stroke-width="0.3"/>
+      `).join('')}
+      <!-- Flèche colle -->
+      <line x1="${F(cx+18)}" y1="${F(wt+mH_d/2)}" x2="${F(cx+28)}" y2="${F(wt+mH_d/2)}" stroke="#4a7ccc" stroke-width="0.8" stroke-dasharray="3,2"/>
+      <polygon points="${F(cx+30)},${F(wt+mH_d/2-3)} ${F(cx+30)},${F(wt+mH_d/2+3)} ${F(cx+35)},${F(wt+mH_d/2)}" fill="#4a7ccc"/>
+    </g>
+    <!-- Labels -->
+    <text x="75" y="20" font-size="7" fill="#4a7ccc" font-family="monospace">Encadrement briques</text>
+    <text x="75" y="28" font-size="6" fill="#3a4e66" font-family="monospace">→ coller sur mur extérieur</text>
+    <text x="${F(cx-20)}" y="${F(wt-8)}" font-size="7" fill="#5a7a9a" font-family="monospace" text-anchor="middle">Larmier T</text>
+    <text x="${F(cx-20)}" y="${F(wt-2)}" font-size="6" fill="#3a4e66" font-family="monospace" text-anchor="middle">↓ slot dans le mur</text>
+    <text x="${F(wr+6)}" y="${F(cy)}" font-size="7" fill="#5a7a9a" font-family="monospace">Mur principal</text>
+    <text x="${F(wr+6)}" y="${F(cy+8)}" font-size="6" fill="#3a4e66" font-family="monospace">fente + slot</text>
+  `;
+}
+
+gen();
+</script>
+</body>
+</html>
