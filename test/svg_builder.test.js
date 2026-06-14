@@ -127,13 +127,14 @@ describe('SVGBuilder', () => {
     assert.ok(svg.startsWith('<svg'));
   });
 
-  it('empty layers are omitted from output', () => {
+  it('all 3 layers are present in output (for Inkscape compatibility)', () => {
     const b = freshBuilder();
     // Only add cut paths
     b.addCutPath('M0,0 L10,0');
     const svg = b.build();
-    assert.ok(!svg.includes('layer-engrave')); // empty engrave layer omitted
-    assert.ok(!svg.includes('layer-labels'));  // empty labels layer omitted
+    assert.ok(svg.includes('id="layer-cut"'));
+    assert.ok(svg.includes('id="layer-engrave"'));
+    assert.ok(svg.includes('id="layer-labels"'));
   });
 
   it('SVG has correct namespace and dimensions', () => {
