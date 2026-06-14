@@ -13,33 +13,33 @@
  *  └────┴─────┬──────┴────┴──────────┘
  *             │  bottom  │  X × Z
  *             │  (opt.)  │
- *             └──────────┘
- *
- * Gaps between adjacent faces = mat (material thickness),
- * so that tab protrusions don't visually overlap neighbors.
- *
- * EDGE TYPE TABLE (fully consistent — every shared edge is tab↔notch)
- *
- *  Face    top     right   bottom  left
- *  top     tab     tab     tab     tab     ← all-tab; slots INTO vertical walls
- *  bottom  tab     tab     tab     tab
- *  front   notch   tab     notch   notch
- *  back    notch   tab     notch   notch
- *  left    notch   tab     notch   notch
- *  right   notch   tab     notch   notch
- *
- * Every pair checks out:
- *  top.bottom=tab    ↔ front.top=notch    ✓
- *  top.left=tab      ↔ left.top=notch     ✓
- *  top.right=tab     ↔ right.top=notch    ✓
- *  top.top=tab       ↔ back.top=notch     ✓  (3D fold)
- *  front.left=notch  ↔ left.right=tab     ✓
- *  front.right=tab   ↔ right.left=notch   ✓  (wait — front.right=tab means front protrudes right)
- *
- * NOTE: front.right=tab, right.left should be notch.
- *       In table: right.left = notch ✓
- *       right.right=tab ↔ back.left=notch ✓
- *       back.right=tab ↔ left.left=notch ✓  (3D fold)
+ *  *             └──────────┘
+ *  *
+ *  * Gaps between adjacent faces = mat (material thickness),
+ *  * so that tab protrusions don't visually overlap neighbors.
+ *  *
+ *  * EDGE TYPE TABLE (fully consistent — every shared edge is tab↔notch)
+ *  *
+ *  *  Face    top     right   bottom  left
+ *  *  top     tab     tab     tab     tab     ← all-tab; slots INTO vertical walls
+ *  *  bottom  tab     tab     tab     tab
+ *  *  front   notch   tab     notch   notch
+ *  *  back    notch   tab     notch   notch
+ *  *  left    notch   tab     notch   notch
+ *  *  right   notch   tab     notch   notch
+ *  *
+ *  * Every pair checks out:
+ *  *  top.bottom=tab    ↔ front.top=notch    ✓
+ *  *  top.left=tab      ↔ left.top=notch     ✓
+ *  *  top.right=tab     ↔ right.top=notch    ✓
+ *  *  top.top=tab       ↔ back.top=notch     ✓  (3D fold)
+ *  *  front.left=notch  ↔ left.right=tab     ✓
+ *  *  front.right=tab   ↔ right.left=notch   ✓  (wait — front.right=tab means front protrudes right)
+ *  *
+ *  * NOTE: front.right=tab, right.left should be notch.
+ *  *       In table: right.left = notch ✓
+ *  *       right.right=tab ↔ back.left=notch ✓
+ *  *       back.right=tab ↔ left.left=notch ✓  (3D fold)
  */
 
 import { createFaceLayout } from './face_model.js';
@@ -49,8 +49,8 @@ import { createFaceLayout } from './face_model.js';
 // ─────────────────────────────────────────────
 
 const BASE_EDGES = {
-  top:    { top: 'tab',   right: 'tab', bottom: 'tab',   left: 'notch' },
-  bottom: { top: 'tab',   right: 'tab', bottom: 'tab',   left: 'notch' },
+  top:    { top: 'tab',   right: 'tab', bottom: 'tab',   left: 'tab'   },
+  bottom: { top: 'tab',   right: 'tab', bottom: 'tab',   left: 'tab'   },
   front:  { top: 'notch', right: 'tab', bottom: 'notch', left: 'notch' },
   back:   { top: 'notch', right: 'tab', bottom: 'notch', left: 'notch' },
   left:   { top: 'notch', right: 'tab', bottom: 'notch', left: 'notch' },
@@ -130,7 +130,7 @@ export function computeNetLayout(X, Y, Z, mat, mode, nFloors = 1) {
   if (mode !== 'open' && mode !== 'frame') {
     push('top', Z + g, 0, X, Z);
   }
-  if (mode === 'closed') {
+  if (mode === 'closed' || mode === 'open') {
     push('bottom', Z + g, rowY + totalY + g, X, Z);
   }
 

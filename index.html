@@ -477,9 +477,10 @@ import { createBuildParams, createAddonRequest,
          ADDON_FACES, FACE_NAMES }             from './face_model.js';
 import { loadPattern }                         from './svg_builder.js';
 import meurtiereModule                         from './meurtiere.js';
+import fenetre-a-meneauxModule from './addons/fenetre-a-meneaux.js';
 
 // ── Registre de tous les add-ons disponibles ──────────────────────
-const ADDONS = [ meurtiereModule ];
+const ADDONS = [meurtiereModule, fenetre-a-meneauxModule];
 // Pour ajouter un futur add-on : importer son module et l'ajouter ici.
 
 // ── État courant ──────────────────────────────────────────────────
