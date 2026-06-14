@@ -316,7 +316,6 @@ export async function loadPattern(file, dpi = 300) {
 // ─────────────────────────────────────────────
 
 function layer(id, inkscapeLabel, elements) {
-  if (!elements.length) return '';
   return (
     `  <g id="${id}" ` +
     `inkscape:label="${inkscapeLabel}" ` +
